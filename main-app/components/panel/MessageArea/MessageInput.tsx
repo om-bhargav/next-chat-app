@@ -27,6 +27,7 @@ export default function MessageInput({ chat, editMessage, isEditMode, setEditMes
     const [pending, startTransition] = useTransition();
     const { id } = useUserStore();
     const isBlocked = !!(chat?.blockedById);
+    const sendingRef = useRef(false);
     useEffect(() => {
         if (editMessage) {
             setMessage(editMessage.content);
@@ -60,7 +61,8 @@ export default function MessageInput({ chat, editMessage, isEditMode, setEditMes
     };
 
     const sendMessage = () => {
-        if (!chat) return;
+        if (!chat || pending || sendingRef.current) return;
+        sendingRef.current = true;
         startTransition(async ()=>{
         if (!message.trim() && previewUrls.length === 0) return;
         if (isEditMode) {
@@ -107,6 +109,7 @@ export default function MessageInput({ chat, editMessage, isEditMode, setEditMes
             );
         }
         });
+        sendingRef.current = false;
     };
 
     const handleImageSelect = async (
