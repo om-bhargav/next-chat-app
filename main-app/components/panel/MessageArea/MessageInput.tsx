@@ -61,7 +61,7 @@ export default function MessageInput({ chat, editMessage, isEditMode, setEditMes
 
     const sendMessage = () => {
         if (!chat) return;
-
+        startTransition(async ()=>{
         if (!message.trim() && previewUrls.length === 0) return;
         if (isEditMode) {
             globalSocket.emit("edit_dm", {
@@ -106,6 +106,7 @@ export default function MessageInput({ chat, editMessage, isEditMode, setEditMes
                 }
             );
         }
+        });
     };
 
     const handleImageSelect = async (
@@ -166,7 +167,7 @@ export default function MessageInput({ chat, editMessage, isEditMode, setEditMes
                     type="file"
                     accept="image/*"
                     multiple
-                    disabled={isBlocked}
+                    disabled={pending || isBlocked}
                     hidden
                     onChange={handleImageSelect}
                 />
@@ -177,8 +178,11 @@ export default function MessageInput({ chat, editMessage, isEditMode, setEditMes
                         size="icon"
                         variant="ghost"
                         disabled={pending || isBlocked}
+                        asChild
                     >
+                    <span className="size-4">
                         <Paperclip className="size-4" />
+                    </span>
                     </Button>
                 </label>
 
