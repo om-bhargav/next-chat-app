@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                  String              @id @default(cuid())
+  clerkId             String              @unique
+  image               String?
+  email               String              @unique
+  username            String              @unique
+  fullname            String
+  bio                 String
+  sentInvitations     ContactInvitation[] @relation("InvitationSender")
+  receivedInvitations ContactInvitation[] @relation("InvitationReceiver")
+
+  contactsAsUser1 Contact[] @relation("ContactUser1")
+  contactsAsUser2 Contact[] @relation("ContactUser2")
+
+  blockedContacts Contact[] @relation("BlockedBy")
+  messagesSent    Message[] @relation("MessageSender")
+}
+
+model ContactInvitation {
+  id String @id @default(cuid())
+
+  senderId   String
+  receiverId String
+
+  sender   User @relation("InvitationSender", fields: [senderId], references: [id])
+  receiver User @relation("InvitationReceiver", fields: [receiverId], references: [id])
+
+  status InvitationStatus @default(PENDING)
+
+  @@unique([senderId, receiverId])
+}
+
+model Contact {
+  id String @id @default(cuid())
+
+  user1Id String
+  user2Id String
+
+  user1 User @relation("ContactUser1", fields: [user1Id], references: [id])
+  user2 User @relation("ContactUser2", fields: [user2Id], references: [id])
+
+  messages Message[]
+
+  blockedById String?
+  blockedBy   User?   @relation("BlockedBy", fields: [blockedById], references: [id])
+
+  blockedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@unique([user1Id, user2Id])
+}
+
+model Message {
+  id String @id @default(cuid())
+
+  contactId String
+  senderId  String
+
+  contact Contact @relation(fields: [contactId], references: [id])
+  sender  User    @relation("MessageSender", fields: [senderId], references: [id])
+
+  content   String?
+  images    String[]
+  createdAt DateTime @default(now())
+  isSeen    Boolean  @default(false)
+  isDeleted Boolean  @default(false)
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}

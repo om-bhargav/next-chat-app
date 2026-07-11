@@ -1,0 +1,15 @@
+tasks:
+add block and unblock feature
+add calling and video calling models add webrtc
+add authentication to sockets
+
+steps:
+1. next initialize
+2. shadcn initialize
+3. make elements for website like headings, sub headings, paragraphs and buttons
+4. make pages in pages directory 
+5. link pages to app router pages
+6. make frontend
+7. implement api's with middleware wrappers
+8. integrate api's
+9. divide components on behalf of page
