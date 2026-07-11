@@ -1,11 +1,11 @@
 import "dotenv/config";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import directChatHandlers from "./handlers/directChatHandlers";
-import statusHandlers from "./handlers/statusHandlers";
+import directChatHandlers from "./handlers/directChatHandlers.js";
+import statusHandlers from "./handlers/statusHandlers.js";
 import express from "express";
 const hostname = process.env.HOSTNAME || "localhost";
-const port = parseInt(process.env.PORT || "3000", 10);
+const PORT = parseInt(process.env.PORT || "3000", 10);
 const app = express();
 const httpServer = createServer(app);
 const socketToUser = new Map<string, string>();
@@ -49,6 +49,6 @@ io.on("connection", (socket) => {
     }
   });
 });
-httpServer.listen(port, () => {
-  console.log(`> Ready on http://${hostname}:${port}`);
+httpServer.listen(PORT, () => {
+  console.log(`> Ready on http://${hostname}:${PORT}`);
 });

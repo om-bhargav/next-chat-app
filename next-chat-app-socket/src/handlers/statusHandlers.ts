@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { Server, Socket } from "socket.io";
-import { OnlineUsersMap, SocketMap } from "../server";
+import { OnlineUsersMap, SocketMap } from "../server.js";
 
 export default function statusHandlers(
   io: Server,

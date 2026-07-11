@@ -2,16 +2,15 @@
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
     "module": "ESNext",
-    "moduleResolution": "node",
     "target": "ES2023",
     "strict": true,
     "esModuleInterop": true,
     "rootDir": "./src",
     "outDir": "./dist",
-    "types": ["node"]
-  },
-  "paths": {
-    "@/*": ["./*"]
+    "types": ["node"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

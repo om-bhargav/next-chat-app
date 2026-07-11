@@ -1,8 +1,8 @@
 import "dotenv/config";
 import { Server, Socket } from "socket.io";
-import { prisma } from "../db/index";
-import { messageSchema } from "../validations/messageSchema";
-import { activeChatsType, SocketMap } from "../server";
+import { prisma } from "../db/index.js";
+import { messageSchema } from "../validations/messageSchema.js";
+import { activeChatsType, SocketMap } from "../server.js";
 interface SendMessagePayload {
   contactId: string;
   senderId: string;
