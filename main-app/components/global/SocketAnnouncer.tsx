@@ -2,7 +2,7 @@
 import { io } from "socket.io-client";
 import { useUserStore } from "@/context";
 import { useEffect } from "react";
-export const globalSocket = io(process.env.WEBSOCKET_URL || "http://localhost:3002", {
+export const globalSocket = io((process.env.NEXT_PUBLIC_WEBSOCKET_URL || "http://localhost:3002"), {
   transports: ["websocket"]
 });
 export default function SocketAnnouncer() {
