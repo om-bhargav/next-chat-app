@@ -10,7 +10,7 @@ import useSWR from "swr";
 import { fetcher } from "@/lib/fetcher";
 import { globalSocket } from "../global/SocketAnnouncer";
 import { Message } from "./cards/MessageCard";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { mutate } from "swr";
 import { useUserStore } from "@/context";
 interface Props {
@@ -53,9 +53,15 @@ export default function ChatList({ selectedChat, setSelectedChat }: Props) {
       keepPreviousData: true,
     }
   );
+  const [search,setSearch] = useState("");
   const chats = data?.data ?? [];
   const { id } = useUserStore();
-
+  const filteredChats = useMemo(() => {
+    if(!chats) return [];
+    return (chats as ContactListItem[]).filter((item)=>{
+      return item.user.fullname.toLowerCase().includes(search.toLowerCase());
+    });
+  },[chats,search]);
   const handleSelectChat = (chat: ContactListItem) => {
     setSelectedChat(chat);
     mutateChats(
@@ -280,6 +286,8 @@ export default function ChatList({ selectedChat, setSelectedChat }: Props) {
           <Input
             placeholder="Search chats..."
             className="pl-9 shadow-md border-0"
+            value={search}
+            onChange={(e)=>{setSearch(e.target.value)}}
           />
         </div>
       </div>
@@ -290,13 +298,13 @@ export default function ChatList({ selectedChat, setSelectedChat }: Props) {
           <ErrorLoading
             loading={isLoading}
             error={error}
-            dataLength={chats.length}
+            dataLength={filteredChats.length}
             emptyMessage="No conversations found."
             loadingCard={ChatCardSkeleton}
             loadingCount={8}
           >
             <div className="space-y-2">
-              {chats.map((chat: ContactListItem) => (
+              {filteredChats.map((chat: ContactListItem) => (
                 <ChatCard
                   key={chat.id}
                   chat={chat}
