@@ -62,53 +62,54 @@ export default function MessageInput({ chat, editMessage, isEditMode, setEditMes
 
     const sendMessage = () => {
         if (!chat || pending || sendingRef.current) return;
-        startTransition(async ()=>{
-            sendingRef.current = true;
-        if (!message.trim() && previewUrls.length === 0) return;
-        if (isEditMode) {
-            globalSocket.emit("edit_dm", {
-                contactId: editMessage?.contactId,
-                content: message,
-                messageId: editMessage?.id
-            }, (res: {
-                success: boolean;
-                message?: string;
-                data?: Message;
-            }) => {
-                if (!res.success) {
-                    toast.error(res.message ?? "Failed to send message.");
-                    return;
-                }
-                setEditMessage(null);
-                setMessage("");
-                setPreviewUrls([]);
-            });
-
-        } else {
-            globalSocket.emit(
-                "send_dm",
-                {
-                    contactId: chat.id,
-                    senderId: id,
-                    content: message.trim() || null,
-                    images: previewUrls
-                },
-                (res: {
+        sendingRef.current = true;
+        startTransition(async () => {
+            if (!message.trim() && previewUrls.length === 0) return;
+            if (isEditMode) {
+                globalSocket.emit("edit_dm", {
+                    contactId: editMessage?.contactId,
+                    content: message,
+                    messageId: editMessage?.id
+                }, (res: {
                     success: boolean;
                     message?: string;
                     data?: Message;
                 }) => {
+                    sendingRef.current = false;                    
                     if (!res.success) {
                         toast.error(res.message ?? "Failed to send message.");
                         return;
                     }
-
+                    setEditMessage(null);
                     setMessage("");
                     setPreviewUrls([]);
-                }
-            );
-        }
-        sendingRef.current = false;
+                });
+
+            } else {
+                globalSocket.emit(
+                    "send_dm",
+                    {
+                        contactId: chat.id,
+                        senderId: id,
+                        content: message.trim() || null,
+                        images: previewUrls
+                    },
+                    (res: {
+                        success: boolean;
+                        message?: string;
+                        data?: Message;
+                    }) => {
+                        sendingRef.current = false;
+                        if (!res.success) {
+                            toast.error(res.message ?? "Failed to send message.");
+                            return;
+                        }
+
+                        setMessage("");
+                        setPreviewUrls([]);
+                    }
+                );
+            }
         });
     };
 
@@ -183,9 +184,9 @@ export default function MessageInput({ chat, editMessage, isEditMode, setEditMes
                         disabled={pending || isBlocked}
                         asChild
                     >
-                    <span className="size-4">
-                        <Paperclip className="size-4" />
-                    </span>
+                        <span className="size-4">
+                            <Paperclip className="size-4" />
+                        </span>
                     </Button>
                 </label>
 
