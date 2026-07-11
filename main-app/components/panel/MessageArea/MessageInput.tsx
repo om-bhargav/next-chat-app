@@ -62,8 +62,8 @@ export default function MessageInput({ chat, editMessage, isEditMode, setEditMes
 
     const sendMessage = () => {
         if (!chat || pending || sendingRef.current) return;
-        sendingRef.current = true;
         startTransition(async ()=>{
+            sendingRef.current = true;
         if (!message.trim() && previewUrls.length === 0) return;
         if (isEditMode) {
             globalSocket.emit("edit_dm", {
@@ -108,8 +108,8 @@ export default function MessageInput({ chat, editMessage, isEditMode, setEditMes
                 }
             );
         }
-        });
         sendingRef.current = false;
+        });
     };
 
     const handleImageSelect = async (
