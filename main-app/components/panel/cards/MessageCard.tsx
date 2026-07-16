@@ -113,7 +113,7 @@ export function MessageCard({ message, setEditMessage }: MessageCardProps) {
                     </div>
                 ) : (
                     message.content && (
-                        <p className="whitespace-pre-wrap wrap-break-all text-sm leading-relaxed">
+                        <p className="whitespace-pre-wrap break-all text-sm leading-relaxed">
                             {message.content}
                         </p>
                     )
