@@ -149,7 +149,7 @@ export function PanelSidebar() {
                     <div className="flex-1 w-full">
                         <ThemeButton />
                     </div>
-                    <SignOutButton redirectUrl="/">
+                    <SignOutButton redirectUrl="/sign-in">
                         <Button
                             variant="ghost"
                             size="icon"
