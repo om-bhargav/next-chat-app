@@ -92,13 +92,13 @@ export function ImageGalleryDialog({
 
                     {/* Thumbnails */}
                     {images.length > 1 && (
-                        <div className="flex justify-center gap-3 overflow-x-auto border-t border-white/10 bg-black/90 p-5">
+                        <div className="flex max-md:flex-wrap justify-center gap-3 overflow-x-auto border-t border-white/10 bg-black/90 p-5">
                             {thumbnails.map((image, index) => (
                                 <button
                                     key={index}
                                     onClick={() => setActiveIndex(index)}
                                     className={cn(
-                                        "relative h-20 w-28 overflow-hidden rounded-lg border-2 transition-all",
+                                        "relative h-15 w-15 md:h-20 md:w-28 overflow-hidden rounded-lg border-2 transition-all",
                                         activeIndex === index
                                             ? "border-white"
                                             : "border-transparent opacity-70 hover:opacity-100"
