@@ -11,6 +11,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from "@/components/ui/button";
 import { Ban, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import { globalSocket } from "@/components/global/SocketAnnouncer";
+import { ImageGalleryDialog } from "../dialogs/ImageGallery";
 
 export interface Message {
     id: string;
@@ -61,31 +62,30 @@ export function MessageCard({ message, setEditMessage }: MessageCardProps) {
                     images.length > 0 ? "md:min-w-[30%] max-md:w-full" : ""
                 )}
             >
-                {images.length > 0 && (
-                    <div
-                        className={cn(
-                            "mb-3 grid gap-2 overflow-hidden rounded-2xl",
-                            images.length === 1 && "grid-cols-1",
-                            images.length === 2 && "grid-cols-2",
-                            images.length >= 3 && "grid-cols-2"
-                        )}
-                    >
-                        {images.map((image, index) => (
-                            <Link
-                                key={index}
-                                target="_blank"
-                                href={image}
-                                className={cn(
-                                    "relative overflow-hidden rounded-xl",
-                                    images.length === 1
-                                        ? "h-64 w-full"
-                                        : images.length === 2
-                                            ? "h-40"
-                                            : index === 0
-                                                ? "col-span-2 h-52"
-                                                : "h-36"
-                                )}
-                            >
+                <ImageGalleryDialog images={images}>
+                    {images.length > 0 && (
+                        <div
+                            className={cn(
+                                "mb-3 grid gap-2 overflow-hidden rounded-2xl",
+                                images.length === 1 && "grid-cols-1",
+                                images.length === 2 && "grid-cols-2",
+                                images.length >= 3 && "grid-cols-2"
+                            )}
+                        >
+                            {images.map((image, index) => (
+                                <div
+                                    key={index}
+                                    className={cn(
+                                        "relative overflow-hidden rounded-xl",
+                                        images.length === 1
+                                            ? "h-64 w-full"
+                                            : images.length === 2
+                                                ? "h-40"
+                                                : index === 0
+                                                    ? "col-span-2 h-52"
+                                                    : "h-36"
+                                    )}
+                                >
                                 <Image
                                     src={image}
                                     alt={`Attachment ${index + 1}`}
@@ -94,11 +94,11 @@ export function MessageCard({ message, setEditMessage }: MessageCardProps) {
                                     className="object-cover transition-transform duration-300 hover:scale-105"
                                     sizes="(max-width:768px) 100vw, 400px"
                                 />
-                            </Link>
-                        ))}
-                    </div>
-                )}
-
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </ImageGalleryDialog>
                 {message.isDeleted ? (
                     <div
                         className={cn(
